@@ -1,0 +1,41 @@
+name: Masstransit.PoC
+network: localdev
+services:
+  - name: server
+    project: MassTransit.Poc.Server\MassTransit.Poc.Server.csproj
+    env: 
+      - name: CONFIG_RABBITMQ__HOSTNAME
+        value: localhost   
+      - name: CONFIG_RABBITMQ__PASSWORD
+        value: P@ssw0rd          
+      - name: CONFIG_RABBITMQ__USER
+        value: user
+      - name: CONFIG_RABBITMQ__VIRTUALHOST
+        value: /   
+    bindings:
+      - protocol: https 
+        port: 30000
+  # - name: client
+  #   project: MassTransit.Poc.Client\MassTransit.Poc.Client.csproj
+  #   env: 
+  #     - name: CONFIG_RABBITMQ__HOSTNAME
+  #       value: localhost   
+  #     - name: CONFIG_RABBITMQ__PASSWORD
+  #       value: P@ssw0rd          
+  #     - name: CONFIG_RABBITMQ__USER
+  #       value: user
+  #     - name: CONFIG_RABBITMQ__VIRTUALHOST
+  #       value: /      
+  #   bindings:
+  #     - protocol: https 
+  #       port: 30001
+  - name: rabbitMq
+    image: rabbitmq:3.9.1
+    volumes:
+      - source: ./rabbitmq.conf
+        target: /etc/rabbitmq/rabbitmq.conf
+      - source: ./enabled_plugins
+        target: /etc/rabbitmq/enabled_plugins 
+    bindings:
+      - protocol: amqp
+        port: 5672
